@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Currencies
+class CurrencyCollection
 {
     private array $currencies;
 

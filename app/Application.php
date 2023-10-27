@@ -4,7 +4,7 @@ namespace App;
 
 class Application
 {
-    private Exchange $exchange;
+    private ExchangeCollection $exchanges;
 
 
     public function __construct()
@@ -13,8 +13,13 @@ class Application
 
     public function run(): void
     {
-        $this->exchange = $this->buildExchange();
+        $this->exchanges = $this->buildExchanges();
         $this->ui();
+    }
+
+    public function buildExchanges(): ExchangeCollection
+    {
+        return new ExchangeCollection([$this->buildExchange()]);
     }
 
     public function buildExchange(): Exchange
@@ -37,7 +42,7 @@ class Application
     public function ui(): void
     {
         while (true) {
-            echo "Date of rates: " . $this->exchange->getTimestamp() . PHP_EOL;
+            // echo "Date of rates: " . $this->exchanges->getTimestamp() . PHP_EOL;
             echo "1. to do currency conversion\n";
             echo "any other key to exit ";
             $choice = (int)readline();
@@ -63,8 +68,17 @@ class Application
                     }
                     echo "You want to convert $amount " . IsoCodes::getName($currency);
                     echo " into " . IsoCodes::getName($currencyTo) . "\nYou get:\n";
-                    echo ($this->exchange->exchange($currency, 100 * $amount, $currencyTo)) / 100
-                        . " " . IsoCodes::getName($currencyTo) . "\n";
+                    // echo ($this->exchanges->exchange($currency, 100 * $amount, $currencyTo)) / 100
+                    //  . " " . IsoCodes::getName($currencyTo) . "\n";
+                    /**
+                     * @var Exchange $exchange
+                     */
+                    foreach ($this->exchanges->list() as $exchange) {
+                        echo "Exchange: " . $exchange->getName() .
+                            " you would get " .
+                            $exchange->exchange($currency, 100 * $amount, $currencyTo) / 100 .
+                            " " . IsoCodes::getName($currencyTo) . "\n";
+                    }
                     break;
                 default:
                     die;
