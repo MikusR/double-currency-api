@@ -2,8 +2,6 @@
 
 namespace App;
 
-use App\IsoCodes;
-
 class Application
 {
     private Exchange $exchange;
@@ -54,19 +52,19 @@ class Application
                         break;
                     };
                     $currency = strtoupper($userInput[1]);
-                    if (array_key_exists($currency, $this->isoCodes->get()) === false) {
+                    if (array_key_exists($currency, IsoCodes::get()) === false) {
                         echo "no such currency\n";
                         break;
                     }
                     $currencyTo = strtoupper(readline("Currency to "));
-                    if (array_key_exists($currencyTo, $this->isoCodes->get()) === false) {
+                    if (array_key_exists($currencyTo, IsoCodes::get()) === false) {
                         echo "no such currency\n";
                         break;
                     }
-                    echo "You want to convert $amount {$this->isoCodes->get()[$currency]}";
-                    echo " into {$this->isoCodes->get()[$currencyTo]} \nYou get:\n";
+                    echo "You want to convert $amount " . IsoCodes::getName($currency);
+                    echo " into " . IsoCodes::getName($currencyTo) . "\nYou get:\n";
                     echo ($this->exchange->exchange($currency, 100 * $amount, $currencyTo)) / 100
-                        . " {$this->isoCodes->get()[$currencyTo]}\n";
+                        . " " . IsoCodes::getName($currencyTo) . "\n";
                     break;
                 default:
                     die;

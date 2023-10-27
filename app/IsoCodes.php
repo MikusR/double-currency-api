@@ -6,7 +6,7 @@ class IsoCodes
 {
     private static array $code;
 
-    public function __construct()
+    public static function __constructStatic()
     {
         self::$code = [
             'AED' => 'UAE Dirham',
@@ -184,3 +184,5 @@ class IsoCodes
         return (self::$code[$isoCode]) ?? 'No name';
     }
 }
+
+IsoCodes::__constructStatic();
