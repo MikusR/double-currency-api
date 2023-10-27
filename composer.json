@@ -1,0 +1,21 @@
+{
+  "name": "mikusr/double-currency-api",
+  "description": "Homework Double currency API",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "MikusR",
+      "email": "mikus.rakis@gmail.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.5",
+    "nesbot/carbon": "^2.71",
+    "ext-json": "*",
+    "ext-readline": "*"
+  }
+}
