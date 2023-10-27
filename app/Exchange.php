@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 
 class Exchange
 {
@@ -12,9 +11,8 @@ class Exchange
     private CurrencyCollection $currencies;
 
 
-    public function __construct(string $timestamp, string $name, array $currencies)
+    public function __construct(string $name, array $currencies)
     {
-        $this->timestamp = $timestamp;
         $this->name = $name;
         $this->currencies = new CurrencyCollection($currencies);
     }
@@ -28,11 +26,7 @@ class Exchange
     /**
      * @return string
      */
-    public function getTimestamp(): string
-    {
-        return Carbon::createFromTimestamp($this->timestamp)->toDateTimeString();
-    }
-
+    
     /**
      * @return string
      */

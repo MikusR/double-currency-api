@@ -8,10 +8,9 @@ class Currency
     private string $isoCode;
     private float $rate;
 
-    public function __construct(string $isoCode, string $name, float $rate)
+    public function __construct(string $isoCode, float $rate)
     {
         $this->isoCode = $isoCode;
-        $this->name = $name;
         $this->rate = $rate;
     }
 

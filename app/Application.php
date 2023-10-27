@@ -5,10 +5,16 @@ namespace App;
 class Application
 {
     private ExchangeCollection $exchanges;
+    private array $apis;
 
 
     public function __construct()
     {
+        $this->apis = [
+            'exchangeratesapi.io',
+            'frankfurter.app',
+            'fawazahmed0'
+        ];
     }
 
     public function run(): void
@@ -19,30 +25,30 @@ class Application
 
     public function buildExchanges(): ExchangeCollection
     {
-        return new ExchangeCollection([$this->buildExchange()]);
+        $exchanges = [];
+        foreach ($this->apis as $api) {
+            $exchanges[$api] = $this->buildExchange($api);
+        }
+        return new ExchangeCollection($exchanges);
     }
 
-    public function buildExchange(): Exchange
+    public function buildExchange(string $name): ?Exchange
     {
-        $json = json_decode(
-            file_get_contents("http://api.exchangeratesapi.io/v1/latest?access_key={$_ENV['API_KEY']}")
-        );
-        if (!$json->success) {
-            die;
+        switch ($name) {
+            case 'exchangeratesapi.io':
+                return Api\ExchangeratesapiIo::get();
+            case 'frankfurter.app':
+                return Api\FrankfurterApp::get();
+            case 'fawazahmed0':
+                return Api\Fawazahmed::get();
+            default:
+                return null;
         }
-        $currencies = [];
-        foreach (IsoCodes::get() as $isoCode => $name) {
-            if (property_exists($json->rates, $isoCode)) {
-                $currencies[$isoCode] = new Currency($isoCode, $name, $json->rates->$isoCode);
-            }
-        }
-        return new Exchange($json->timestamp, 'exchangeratesapi.io', $currencies);
     }
 
     public function ui(): void
     {
         while (true) {
-            // echo "Date of rates: " . $this->exchanges->getTimestamp() . PHP_EOL;
             echo "1. to do currency conversion\n";
             echo "any other key to exit ";
             $choice = (int)readline();
@@ -68,8 +74,7 @@ class Application
                     }
                     echo "You want to convert $amount " . IsoCodes::getName($currency);
                     echo " into " . IsoCodes::getName($currencyTo) . "\nYou get:\n";
-                    // echo ($this->exchanges->exchange($currency, 100 * $amount, $currencyTo)) / 100
-                    //  . " " . IsoCodes::getName($currencyTo) . "\n";
+
                     /**
                      * @var Exchange $exchange
                      */
