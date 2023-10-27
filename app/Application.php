@@ -75,15 +75,8 @@ class Application
                     echo "You want to convert $amount " . IsoCodes::getName($currency);
                     echo " into " . IsoCodes::getName($currencyTo) . "\nYou get:\n";
 
-                    /**
-                     * @var Exchange $exchange
-                     */
-                    foreach ($this->exchanges->list() as $exchange) {
-                        echo "Exchange: " . $exchange->getName() .
-                            " you would get " .
-                            $exchange->exchange($currency, 100 * $amount, $currencyTo) / 100 .
-                            " " . IsoCodes::getName($currencyTo) . "\n";
-                    }
+                    echo $this->buildResults($currency, $currencyTo, $amount);
+
                     break;
                 default:
                     die;
@@ -91,4 +84,26 @@ class Application
         }
     }
 
+    public function buildResults(string $currency, string $currencyTo, int $amount): string
+    {
+        $max = 0;
+        $maxKey = '';
+        $results = [];
+        /**
+         * @var Exchange $exchange
+         */
+        foreach ($this->exchanges->list() as $exchange) {
+            $amount = $exchange->exchange($currency, 100 * $amount, $currencyTo) / 100;
+            if ($amount > $max) {
+                $max = $amount;
+                $maxKey = $exchange->getName();
+            }
+            $results[$exchange->getName()] = "Exchange: " . $exchange->getName() .
+                " you would get " .
+                $amount .
+                " " . IsoCodes::getName($currencyTo);
+        }
+        $results[$maxKey] .= " *";
+        return implode("\n", $results) . "\n";
+    }
 }
