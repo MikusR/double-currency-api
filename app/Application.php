@@ -7,11 +7,10 @@ use App\IsoCodes;
 class Application
 {
     private Exchange $exchange;
-    private IsoCodes $isoCodes;
+
 
     public function __construct()
     {
-        $this->isoCodes = new IsoCodes();
     }
 
     public function run(): void
@@ -29,12 +28,12 @@ class Application
             die;
         }
         $currencies = [];
-        foreach ($this->isoCodes->get() as $isoCode => $name) {
+        foreach (IsoCodes::get() as $isoCode => $name) {
             if (property_exists($json->rates, $isoCode)) {
                 $currencies[$isoCode] = new Currency($isoCode, $name, $json->rates->$isoCode);
             }
         }
-        return new Exchange($json->timestamp, $currencies);
+        return new Exchange($json->timestamp, 'exchangeratesapi.io', $currencies);
     }
 
     public function ui(): void

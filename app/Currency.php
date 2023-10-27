@@ -6,7 +6,6 @@ namespace App;
 class Currency
 {
     private string $isoCode;
-    private string $name;
     private float $rate;
 
     public function __construct(string $isoCode, string $name, float $rate)
@@ -23,7 +22,7 @@ class Currency
 
     public function getName(): string
     {
-        return $this->name;
+        return IsoCodes::getName($this->getIsoCode());
     }
 
     public function getRate(): float

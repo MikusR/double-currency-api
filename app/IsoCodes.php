@@ -4,11 +4,11 @@ namespace App;
 
 class IsoCodes
 {
-    private array $code;
+    private static array $code;
 
     public function __construct()
     {
-        $this->code = [
+        self::$code = [
             'AED' => 'UAE Dirham',
             'AFN' => 'Afghani',
             'ALL' => 'Lek',
@@ -174,13 +174,13 @@ class IsoCodes
     /**
      * @return array
      */
-    public function get(): array
+    public static function get(): array
     {
-        return $this->code;
+        return self::$code;
     }
 
-    public function getName(string $isoCode): string
+    public static function getName(string $isoCode): string
     {
-        return $this->code[$isoCode];
+        return (self::$code[$isoCode]) ?? 'No name';
     }
 }
